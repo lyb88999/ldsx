@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highcom.mapper.EmpMapper">
+    <select id="findAll" resultType="emp">
+        select *
+        from emp
+    </select>
+    <select id="findEmpByEmpno" resultType="emp" parameterType="java.lang.Integer">
+        select *
+        from emp
+        where empno = #{empno}
+    </select>
+    <select id="listEmp" resultType="emp" parameterType="emp">
+        select *
+        from emp
+        where job like concat('%', #{job}, '%')
+          and deptno = #{deptno}
+        order by empno
+    </select>
+    <select id="listEmpBySal" resultType="emp" parameterType="java.lang.Double">
+        select *
+        from emp
+        where sal &lt; #{sal}
+        order by empno
+    </select>
+    <select id="ListEmpCount" resultType="int">
+        select count(*)
+        from emp
+    </select>
+    <delete id="deleteEmpByEmpno" parameterType="java.lang.Integer">
+        delete
+        from emp
+        where empno = #{empno}
+    </delete>
+    <insert id="addEmp1" parameterType="emp">
+        insert into emp(ename, job, hiredate, deptno)
+        values (#{ename}, #{job}, #{hiredate}, #{deptno})
+    </insert>
+    <insert id="addEmp2" parameterType="emp">
+        <selectKey keyProperty="empno" resultType="int" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into emp(ename,job,hiredate,deptno) values(#{ename},#{job},#{hiredate},#{deptno})
+    </insert>
+    <update id="updateEmp" parameterType="emp">
+        update emp
+        set job = #{job},
+            sal = #{sal}
+        where empno = #{empno}
+    </update>
+
+
+    <select id="DynamicByIfAndWhere" resultType="emp" parameterType="emp">
+        select * from emp
+        <where>
+            <if test="job!=null and job!=''">
+                and job like concat('%',#{job},'%')
+            </if>
+            <if test="deptno!=null and deptno!=''">
+                and deptno = #{deptno}
+            </if>
+        </where>
+        order by empno
+    </select>
+
+    <select id="DynamicByChoose" resultType="emp" parameterType="emp">
+        select * from emp
+        <where>
+            <choose>
+                <when test="job!=null and job!=''">
+                    and job like concat('%',#{job},'%')
+                </when>
+                <when test="deptno!=null and deptno!=''">
+                    and deptno = #{deptno}
+                </when>
+                <otherwise></otherwise>
+            </choose>
+        </where>
+        order by empno
+    </select>
+
+    <insert id="DynamicByTrim" parameterType="emp">
+        insert into emp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            ename,deptno,
+            <if test="job!=null and job!=''">
+                job,
+            </if>
+            <if test="hiredate!=null" >
+                hiredate,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            #{ename},#{deptno},
+            <if test="job!=null and job!=''">
+                #{job},
+            </if>
+            <if test="hiredate!=null">
+                #{hiredate},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="DynamicBySet" parameterType="emp">
+        update emp
+        <set>
+            <if test="job!=null and job!=''">
+                job = #{job},
+            </if>
+            <if test="sal!=null">
+                sal = #{sal},
+            </if>
+        </set>
+        where empno = #{empno}
+    </update>
+
+    <delete id="DynamicByForEach" parameterType="int">
+        delete from emp where empno in
+        <foreach collection="array" item="empno" open="(" close=")" separator=",">
+            #{empno}
+        </foreach>
+    </delete>
+</mapper>
