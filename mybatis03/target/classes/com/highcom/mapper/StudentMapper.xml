@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highcom.mapper.StudentMapper">
+    <resultMap id="student" type="student">
+        <id property="student_id" column="student_id"/>
+        <result property="class_id" column="class_id"/>
+        <result property="student_name" column="student_name"/>
+        <result property="student_no" column="student_no"/>
+        <association property="classes" javaType="Classes">
+            <id property="class_id" column="class_id"/>
+            <result property="class_no" column="class_no"/>
+            <result property="class_name" column="class_name"/>
+            <association property="teacher" javaType="teacher">
+                <id property="teacher_id" column="teacher_id"/>
+                <result property="class_id" column="class_id"/>
+                <result property="teacher_name" column="teacher_name"/>
+                <result property="teacher_no" column="teacher_no"/>
+            </association>
+        </association>
+        <collection property="scoreList" ofType="score">
+            <id property="score_id" column="score_id"/>
+            <result property="class_id" column="class_id"/>
+            <result property="course_id" column="course_id"/>
+            <result property="student_id" column="student_id"/>
+            <result property="grade" column="grade"/>
+            <association property="course" javaType="course">
+                <id property="course_id" column="course_id"/>
+                <result property="course_name" column="course_name"/>
+                <result property="course_no" column="course_no"/>
+            </association>
+        </collection>
+    </resultMap>
+    <select id="findStudents" resultMap="student">
+        select s.student_id,s.student_no,s.student_name,s2.course_id,s2.grade,c.course_name,c.course_no,c2.class_no, c2.class_name,t.teacher_name
+        from student s join score s2 on s.student_id = s2.student_id join course c on c.course_id = s2.course_id  left join  classes c2 on s.class_id = c2.class_id
+                       join teacher t on c2.class_id = t.class_id
+    </select>
+</mapper>

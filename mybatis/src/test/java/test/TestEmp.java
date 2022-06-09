@@ -86,7 +86,7 @@ public class TestEmp {
 
     @Test
     public void testDeleteOne() {
-        int ok = empMapper.deleteEmpByEmpno(1239);
+        int ok = empMapper.deleteEmpByEmpno(7499);
         if (ok > 0) {
             System.out.println("删除成功");
         } else {
@@ -98,7 +98,7 @@ public class TestEmp {
     @Test
     public void testAddOne1() {
         Emp emp = new Emp();
-        emp.setEname("Tim Cook");
+        emp.setEname("Steve Jobs");
         emp.setJob("CEO");
         emp.setHiredate(new Date());
         emp.setDeptno(10);
@@ -111,7 +111,7 @@ public class TestEmp {
     @Test
     public void testAddOne2() {
         Emp emp = new Emp();
-        emp.setEname("Steve Jobs");
+        emp.setEname("Tim Cook");
         emp.setJob("CLEVER");
         emp.setHiredate(new Date());
         emp.setDeptno(20);
@@ -128,7 +128,7 @@ public class TestEmp {
         Emp emp = new Emp();
         emp.setEmpno(7698);
         emp.setJob("Director");
-        emp.setSal(3500.0);
+        emp.setSal(3600.0);
         int ok = empMapper.updateEmp(emp);
         if (ok > 0) {
             System.out.println("修改一条数据");
@@ -139,8 +139,8 @@ public class TestEmp {
     @Test
     public void testDynamicByIfAndWhere() {
         Emp emp = new Emp();
-        emp.setJob("CEO");
-        // emp.setDeptno(30);
+        emp.setJob("CLERK");
+        emp.setDeptno(20);
         List<Emp> emps = empMapper.DynamicByIfAndWhere(emp);
         for (Emp emp2 : emps) {
             System.out.println(emp2);
@@ -177,7 +177,7 @@ public class TestEmp {
     @Test
     public void testDynamicBySet(){
         Emp emp = new Emp();
-        emp.setEmpno(7909);
+        emp.setEmpno(7920);
         emp.setJob("SAILOR");
         int ok = empMapper.DynamicBySet(emp);
         if(ok > 0){
@@ -188,10 +188,23 @@ public class TestEmp {
 
     @Test
     public void testDynamicByForEach(){
-        int[] arr = {7905,7906,7907,7908,7909};
+        int[] arr = {7918,7919,7920};
         int ok = empMapper.DynamicByForEach(arr);
         if(ok > 0){
             System.out.println("删除数据成功");
+        }
+    }
+
+
+    @Test
+    public void testMulToOne(){
+        Emp emp = empMapper.getEmpById(7369);
+        System.out.println(emp);
+        System.out.println(emp.getDept());
+        List<Emp> list = empMapper.listEmpAll();
+        for(Emp e : list) {
+            System.out.println(e);
+            System.out.println(e.getDept());
         }
     }
 }

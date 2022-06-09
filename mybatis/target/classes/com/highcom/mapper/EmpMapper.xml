@@ -56,7 +56,7 @@
             <if test="job!=null and job!=''">
                 and job like concat('%',#{job},'%')
             </if>
-            <if test="deptno!=null and deptno!=''">
+            <if test="deptno!=null">
                 and deptno = #{deptno}
             </if>
         </where>
@@ -70,7 +70,7 @@
                 <when test="job!=null and job!=''">
                     and job like concat('%',#{job},'%')
                 </when>
-                <when test="deptno!=null and deptno!=''">
+                <when test="deptno!=null and deptno!=0">
                     and deptno = #{deptno}
                 </when>
                 <otherwise></otherwise>
@@ -86,7 +86,7 @@
             <if test="job!=null and job!=''">
                 job,
             </if>
-            <if test="hiredate!=null" >
+            <if test="hiredate!=null">
                 hiredate,
             </if>
         </trim>
@@ -107,7 +107,7 @@
             <if test="job!=null and job!=''">
                 job = #{job},
             </if>
-            <if test="sal!=null">
+            <if test="sal!=null and sal!=0">
                 sal = #{sal},
             </if>
         </set>
@@ -120,4 +120,32 @@
             #{empno}
         </foreach>
     </delete>
+
+
+    <resultMap type="Emp" id="empResultMap">
+        <id property="empno" column="empno"/>
+        <result property="ename" column="ename"/>
+        <result property="job" column="job"/>
+        <result property="hiredate" column="hiredate"/>
+        <result property="sal" column="sal"/>
+        <result property="deptno" column="deptno"/>
+        <association property="dept" javaType="Dept">
+            <id property="deptno" column="ddeptno"/>
+            <result property="dname" column="ddname"/>
+            <result property="loc" column="dloc"/>
+        </association>
+    </resultMap>
+
+    <select id="getEmpById" parameterType="int" resultMap="empResultMap">
+        select e.*, d.deptno ddeptno, d.dname ddname, d.loc dloc
+        from emp e
+                 left join dept d on e.deptno = d.deptno
+        where e.empno = #{empno}
+    </select>
+
+    <select id="listEmpAll" resultMap="empResultMap">
+        select e.*, d.deptno ddeptno, d.dname ddname, d.loc dloc
+        from emp e
+                 left join dept d on e.deptno = d.deptno
+    </select>
 </mapper>
