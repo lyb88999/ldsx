@@ -7,14 +7,22 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mybatis03" />
+        <module name="spring01" />
+        <module name="spring02" />
         <module name="mybatis2" />
         <module name="mybatis" />
+        <module name="springMVC" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="mybatis" target="11" />
       <module name="mybatis03" target="11" />
       <module name="mybatis2" target="11" />
+      <module name="spring01" target="11" />
+      <module name="spring01 (1)" target="11" />
+      <module name="spring02" target="11" />
+      <module name="springMVC" target="8" />
+      <module name="springMVC02" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

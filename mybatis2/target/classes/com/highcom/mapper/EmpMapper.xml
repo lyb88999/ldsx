@@ -142,6 +142,8 @@
                  left join dept d on e.deptno = d.deptno
         where e.empno = #{empno}
     </select>
+
+
     <select id="listEmpAll" resultMap="empResultMap">
         select e.*, d.deptno ddeptno, d.dname ddname, d.loc dloc
         from emp e

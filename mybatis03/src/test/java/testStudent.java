@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 public class testStudent {
     private InputStream is;
@@ -39,16 +40,20 @@ public class testStudent {
     }
 
     @Test
-    public void findStudent(){
+    public void findStudent() {
         List<Student> studentList = studentMapper.findStudents();
-        for(Student student: studentList){
-            List<Score> scoreList = student.getScoreList();
-            Classes classes = student.getClasses();
-            Teacher teacher = classes.getTeacher();
-            System.out.println(student.getStudent_id()+":"+student.getStudent_name()+"\t\t"+classes.getClass_name()+"\t\t"+teacher.getTeacher_name());
-            for(Score score : scoreList){
-                Course course = score.getCourse();
-                System.out.println(course.getCourse_name()+"\t\t"+score.getGrade());
+        for (Student student : studentList) {
+            try{
+                List<Score> scoreList = student.getScoreList();
+                Classes classes = student.getClasses();
+                Teacher teacher = classes.getTeacher();
+                System.out.println(student.getStudent_id() + ":" + student.getStudent_name() + "\t\t" + classes.getClass_name() + "\t\t" + teacher.getTeacher_name());
+                for (Score score : scoreList) {
+                    Course course = score.getCourse();
+                    System.out.println(course.getCourse_name() + "\t\t" + score.getGrade());
+                }
+            }catch (NullPointerException e){
+                System.out.println("查无信息");
             }
         }
     }
